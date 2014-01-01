@@ -86,6 +86,7 @@ ISR(TIMER1_COMPA_vect)
 {	
 	PORTD |= (1 << PD3) | (1 << PD4) | (1 << PD5) | (1 << PD6) | (1 << PD7);
 	TCNT0 = 0;
+	TCNT1 = 0;
 	TCNT2 = 0;
 }
 

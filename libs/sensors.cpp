@@ -1,24 +1,26 @@
 #include "sensors.h"
 
-volatile unsigned int sensor[SENS];
+volatile int sensor[SENS];
 void sensors_init() // przestawic
 {	
 	DDRC = 0;
-	ADCSRA = (1 << ADEN);
+	ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 	ADMUX = (1 << REFS0); // AVcc with external cap at ARef
+	ADCSRA |= (1 << ADSC);
 }
 
-void sensors_update()
+unsigned volatile char i = 0;
+ISR(ADC_vect)
 {
-	for(int i = 0; i < SENS; i++)
-	{
-		ADMUX &= 0b11100000; // czyscimy MUX0-3
-		ADMUX |= i;		
-		for(int ii = 0; ii < 3; ii++)
-		{	
-			ADCSRA |= (1 << ADSC);	
-			while(ADCSRA & (1<<ADSC));	
-			sensor[i] = (ADCL | (ADCH << 8));
-		}		
-	}
+	
+	sensor[i] = ADC;	
+	i++;
+	
+	if(i > SENS - 1)
+		i = 0;
+		
+	ADMUX &= 0b11100000; // czyscimy MUX0-3
+	ADMUX |= i;		
+		
+	ADCSRA |= (1 << ADSC);	
 }

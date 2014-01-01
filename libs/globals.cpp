@@ -1,7 +1,8 @@
 #include "globals.h"
 #include "usart.h"
 
-volatile unsigned char ADDRESS;
+volatile char POSITION = 0;
+volatile char JUMP = 0;
 
 void wait_ms(int ms) {
   int i;

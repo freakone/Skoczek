@@ -9,7 +9,7 @@
 #                is connected.
 # FUSES ........ Parameters for avrdude to flash the fuses appropriately.
 
-DEVICE     = atmega328
+DEVICE     = atmega328p
 CLOCK      = 8000000
 PROGRAMMER = -c usbasp -P usb -F
 LIBDIR     = libs
