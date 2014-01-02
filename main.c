@@ -8,7 +8,7 @@
 #include <avr/eeprom.h>
 
 
-volatile unsigned char step = 0, cnter = 0;
+volatile unsigned char step = 0, cnter = 0, good_cnter = 0;
 volatile int sens_rmb = 0, diffr = 0, delay_cnt = 0, diff = 0;
 int main()
 {
@@ -27,18 +27,26 @@ int main()
 			if(diff < 0 && diff < -2)
 			{
 				set_serwo(MOTR, 55);
-				set_serwo(MOTL, 50);		
+				set_serwo(MOTL, 50);
+				good_cnter = 0;
 			}
 			else if(diff > 0 && diff > 2)
 			{
 				set_serwo(MOTL, 55);
 				set_serwo(MOTR, 50);
+				good_cnter = 0;
 			}
 			else
 			{
 				set_serwo(MOTR, 50);	
 				set_serwo(MOTL, 50);
-				POSITION = 0;
+				good_cnter++;
+				
+				if(good_cnter > 10)
+				{
+					good_cnter = 0;
+					POSITION = 0;
+				}
 			}
 		}
 		
