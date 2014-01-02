@@ -36,6 +36,7 @@ void set_serwo(char num, char perc)
 		if(perc > 52 || perc < 48) switch_serwo(MOTL, 1); else switch_serwo(MOTL, 0);
 		break;
 	case 2:
+		if(perc == 41) perc++;
 		perc = 100 - perc;
 		OCR0B = 137 + perc;
 		if(perc > 52 || perc < 48) switch_serwo(MOTR, 1); else switch_serwo(MOTR, 0);
