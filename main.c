@@ -9,6 +9,7 @@
 
 
 volatile unsigned char step = 0, cnter = 0;
+volatile int sens_rmb = 0, diffr = 0, delay_cnt = 0, diff = 0;
 int main()
 {
 	
@@ -17,29 +18,21 @@ int main()
 	serwo_init();
 	sensors_init();
 	
-	set_serwo(ODLACZ, 85);
-	switch_serwo(ODLACZ, 1);	
-	set_serwo(NACIAG, 50);
-	switch_serwo(NACIAG, 1);
-	set_serwo(KAT, 0);
-	switch_serwo(KAT, 1);	
-	set_serwo(MOTR, 50);
-	switch_serwo(MOTR, 1);
-	set_serwo(MOTL, 50);
-	switch_serwo(MOTL, 1);
 	
 	while(1)
 	{		
 		if(POSITION > 0)
 		{
-			int diff = sensor[4] - sensor[5];
-			if(diff < 0 && diff < -15)
+			diff = sensor[4] - sensor[5];
+			if(diff < 0 && diff < -2)
 			{
-				set_serwo(MOTR, 60);				
+				set_serwo(MOTR, 55);
+				set_serwo(MOTL, 50);		
 			}
-			else if(diff > 0 && diff > 15)
+			else if(diff > 0 && diff > 2)
 			{
-				set_serwo(MOTL, 60);				
+				set_serwo(MOTL, 55);
+				set_serwo(MOTR, 50);
 			}
 			else
 			{
@@ -56,10 +49,13 @@ int main()
 			case 0:
 				set_serwo(ODLACZ, 95);
 				set_serwo(NACIAG, 70);
+				sens_rmb = sensor[0];
 				step++;
 			break;
 			case 1:
-				if(sensor[0] > 800)
+			diffr = sensor[0] - sens_rmb;
+			if(diffr < 0) diffr *= -1;
+				if(diffr >50) //700 && sensor[0] < 1000)
 				{
 					step++;
 				}
@@ -73,18 +69,21 @@ int main()
 					set_serwo(KAT, 90);
 					
 				_delay_ms(10);
+				set_serwo(NACIAG, 50);
 				step++;
-			break;			
+				_delay_ms(700);
+			break;		
+			
+					
 			case 3:
 			set_serwo(ODLACZ, 85);
-			set_serwo(NACIAG, 50);
+			_delay_ms(100);
 			set_serwo(KAT, 0);
+			delay_cnt = 0;
 			step = 0;
 			JUMP = 0;
 			break;
 			}
-		}
-		PORTD ^= (1 << PD2);
-		_delay_ms(500);
+		}		
 	}
 }
