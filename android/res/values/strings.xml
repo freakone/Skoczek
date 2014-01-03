@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Skoczek</string>
+    <string name="action_polacz">Połącz</string>
+    <string name="title_section1">Kontrola automatyczna</string>
+    <string name="title_section2">Kontrola ręczna</string>
+    <string name="action_rozlacz">Rozłącz</string>
+    <string name="switch_control_text">Kontrola jazdy</string>
+    <string name="title_section3">Bluetooth</string>
+
+</resources>
